@@ -38,7 +38,7 @@ APP.HomeAutomation.Manager = {
         };
 
         payloadString = JSON.stringify(payload);
-        message = new Paho.MQTT.Message(payloadString);
+        message = new Paho.Message(payloadString);
         message.destinationName = this.ledCommandBaseTopic + ledId;
         message.qos = 0;
 
@@ -82,7 +82,7 @@ APP.HomeAutomation.Manager = {
     },
 
     connect: function () {
-        this.client = new Paho.MQTT.Client(this.host, this.port, "/wss", this.clientId);
+        this.client = new Paho.Client(this.host, this.port, "/wss", this.clientId);
         this.client.onConnectionLost = this.onConnectionLost;
         this.client.onMessageArrived = this.onMessageArrived;
         this.client.onMessageDelivered = this.onMessageDelivered;
