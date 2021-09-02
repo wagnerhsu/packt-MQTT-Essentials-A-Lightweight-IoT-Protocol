@@ -1,0 +1,18 @@
+{
+  "name": "MyCode",
+  "version": "1.0.0",
+  "description": "",
+  "main": "leds_control.js",
+  "scripts": {
+    "start": "node index.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "@eastdesire/jscolor": "^2.4.6",
+    "mqtt": "^4.2.8",
+    "paho.mqtt.js": "^2.0.5"
+  }
+}

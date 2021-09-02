@@ -12,24 +12,26 @@ APP.HomeAutomation.Manager = {
     ledResultBaseTopic: "home/results/leds/",
 
     // Replace with the host name for the MQTT Server
-    host: "localhost",
+    host: "wagner007.top",
     // Replace with the port number for MQTT over WebSockets the MQTT Server
     port: 9001,
-    clientId: "home-web-" + clientId: "home-web-" + Math.random().toString(16).substr(2, 8),
+    clientId: "home-web-" + Math.random().toString(16).substr(2, 8),
 
     mqttConnectOptions: {
-        timeout: 3,
+        timeout: 30,
         // I want to use MQTT Version 3.1.1
         mqttVersion: 4,
         mqttVersionExplicit: true,
         // For TLS security, you just need to set useSSL to True
         // and install the necessary certificates
-        // useSSL: true,
-        useSSL: false,
-        cleanSession: true
+        useSSL: true,
+        //useSSL: false,
+        cleanSession: true,
+        userName: 'sun-health',
+        password: 'GatewayPass@'
     },
 
-    updateLed: function(ledId, jscolor) {
+    updateLed: function (ledId, jscolor) {
         console.log('I will send ' + jscolor + ' to LED #' + ledId);
         var payload = {
             "Color": jscolor.toString()
@@ -43,12 +45,12 @@ APP.HomeAutomation.Manager = {
         this.client.send(message);
     },
 
-    onConnectionLost: function(responseObject) {
+    onConnectionLost: function (responseObject) {
         if (responseObject.errorCode !== 0)
             console.log("onConnectionLost: " + responseObject.errorMessage);
     },
 
-    onMessageArrived: function(message) {
+    onMessageArrived: function (message) {
         console.log("Message arrived for topic: " + message.destinationName + ", with the following payload: " + message.payloadString);
         if (!message.destinationName.startsWith(APP.HomeAutomation.Manager.ledResultBaseTopic)) {
             return;
@@ -62,12 +64,13 @@ APP.HomeAutomation.Manager = {
             statusLedDiv.textContent = "LED's color set to #" + payload.Color;
             var statusLedCircle = document.getElementById("status-circle-led-" + ledNumber);
             statusLedCircle.style.fill = "#" + payload.Color;
+        }
     },
 
-    onMessageDelivered: function(message) {
+    onMessageDelivered: function (message) {
     },
 
-    onConnectSuccess: function(invocationContext) {
+    onConnectSuccess: function (invocationContext) {
         // Update the status text
         document.getElementById("status").textContent = "Connected with the MQTT Server";
         // Now, subscribe to home/results/leds/1, home/results/leds/2 and
@@ -78,19 +81,19 @@ APP.HomeAutomation.Manager = {
         }
     },
 
-    connect: function() {
-        this.client = new Paho.MQTT.Client(this.host, this.port, this.clientId);
+    connect: function () {
+        this.client = new Paho.MQTT.Client(this.host, this.port, "/wss", this.clientId);
         this.client.onConnectionLost = this.onConnectionLost;
         this.client.onMessageArrived = this.onMessageArrived;
         this.client.onMessageDelivered = this.onMessageDelivered;
         // I want to receive the client in the onSuccess and onFailure callbacks
         // Hence, I save a reference to this.client in invocationContext
         this.mqttConnectOptions.invocationContext = {
-          client: this.client 
+            client: this.client
         };
         this.mqttConnectOptions.onSuccess = this.onConnectSuccess;
         this.mqttConnectOptions.onFailure = function (message) {
-          console.log("Connection has failed: " + message);
+            console.log("Connection has failed: ", message.errorCode, message.errorMessage);
         }
         this.client.connect(this.mqttConnectOptions);
     }

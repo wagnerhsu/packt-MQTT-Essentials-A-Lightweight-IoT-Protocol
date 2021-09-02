@@ -9,13 +9,16 @@ var mqtt = require("mqtt")
 
 
 // Replace with the host name for the MQTT Server
-var host = "localhost"
+var host = "wagner007.top"
 // Replace with the port number for MQTT over WebSockets the MQTT Server
 var port = 9001
 // If we want to work with TLS, we must use the next line
 // because we must use wss:// instead of ws://
 //var client = mqtt.connect("wss://" + host + ":" + port)
-var client = mqtt.connect("ws://" + host + ":" + port)
+var client = mqtt.connect("wss://" + host + ":" + port, {
+    username: "sun-health",
+    password:'GatewayPass@'
+});
 
 var ledCommandBaseTopic = "home/leds/"
 var ledResultBaseTopic = "home/results/leds/"

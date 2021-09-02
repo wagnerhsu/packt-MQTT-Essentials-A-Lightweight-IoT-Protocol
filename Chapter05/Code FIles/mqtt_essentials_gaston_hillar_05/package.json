@@ -1,0 +1,17 @@
+{
+  "name": "mqtt_essentials_gaston_hillar_05",
+  "version": "1.0.0",
+  "description": "",
+  "main": "home_automation.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "jscolor-picker": "^2.0.4",
+    "mqtt": "^4.2.8",
+    "paho-mqtt": "^1.1.0"
+  }
+}
